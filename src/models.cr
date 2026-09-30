@@ -60,6 +60,14 @@ class Shard
     :active
   end
 
+  def status_css : String
+    case status
+    when :active then "st-active"
+    when :stale  then "st-stale"
+    else              "st-abandoned"
+    end
+  end
+
   # For search scoring: lowercase haystacks, computed lazily.
   def lname : String
     @lname ||= name.downcase

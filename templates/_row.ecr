@@ -3,20 +3,11 @@
   <div class="gem-body">
     <div class="gem-title">
       <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
-      <% st = @shard.status %>
-      <% if st == :active %>
-      <span class="badge badge-ok"><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.3 12.2 2.8 8.7l1.4-1.4 2.1 2.1 5.5-5.5 1.4 1.4-6.9 6.9z"/></svg>active</span>
-      <% elsif st == :stale %>
-      <span class="badge badge-warn">stale</span>
-      <% else %>
-      <span class="badge badge-bad">abandoned</span>
-      <% end %>
     </div>
     <p class="gem-desc"><%= HTML.escape(@shard.description.empty? ? "No description." : @shard.description) %></p>
     <div class="gem-meta">
       <a class="chip" href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a>
       <span class="meta-dim"><%= HTML.escape(@shard.full_name) %></span>
-      <span class="meta-dim">· updated <%= @shard.pushed_fmt %></span>
     </div>
   </div>
   <div class="gem-side">
@@ -25,5 +16,6 @@
       <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
       <%= @shard.stars %>
     </span>
+    <span class="gem-date <%= @shard.status_css %>" title="Last push"><%= @shard.pushed_fmt %></span>
   </div>
 </li>

@@ -1,25 +1,16 @@
 <article class="card">
   <a class="cover" href="/shards/<%= HTML.escape(@shard.full_name) %>" aria-hidden="true" tabindex="-1"></a>
-  <h3 class="card-title">
-    <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
-    <% if !@shard.version.empty? %><span class="ver"><%= HTML.escape(@shard.version) %></span><% end %>
-    <% st = @shard.status %>
-    <% if st == :active %>
-    <span class="badge badge-ok"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M6.3 12.2 2.8 8.7l1.4-1.4 2.1 2.1 5.5-5.5 1.4 1.4-6.9 6.9z"/></svg>active</span>
-    <% elsif st == :stale %>
-    <span class="badge badge-warn">stale</span>
-    <% else %>
-    <span class="badge badge-bad">abandoned</span>
-    <% end %>
-  </h3>
-  <p class="card-desc"><%= HTML.escape(@shard.description.empty? ? "No description." : @shard.description) %></p>
-  <div class="card-meta">
-    <a class="chip" href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a>
-    <span class="meta-item" title="Stars">
-      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
-      <%= @shard.stars %>
-    </span>
-    <span class="meta-item meta-dim"><%= HTML.escape(@shard.full_name) %></span>
-    <span class="meta-item meta-dim">updated <%= @shard.pushed_fmt %></span>
-  </div>
+    <h3 class="card-title">
+      <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
+    </h3>
+    <p class="card-desc"><%= HTML.escape(@shard.description.empty? ? "No description." : @shard.description) %></p>
+    <div class="card-meta">
+      <a class="chip" href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a>
+      <span class="meta-item" title="Stars">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
+        <%= @shard.stars %>
+      </span>
+      <span class="meta-item meta-dim"><%= HTML.escape(@shard.full_name) %></span>
+      <span class="meta-item <%= @shard.status_css %>"><%= @shard.pushed_fmt %></span>
+    </div>
 </article>
