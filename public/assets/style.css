@@ -190,7 +190,7 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .chart .bar-link:hover .bar, .chart .bar-g:hover .bar { fill: var(--accent-2); }
 .chart .bar-g:hover { cursor: pointer; }
 .chart-tip {
-  opacity: 0; pointer-events: none; transition: opacity .1s;
+  opacity: 0; pointer-events: none;
   font-family: system-ui, sans-serif; text-anchor: start; dominant-baseline: hanging;
 }
 .chart-tip .c { font-size: 22px; font-weight: 700; fill: #1c2733; }
