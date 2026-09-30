@@ -21,8 +21,10 @@
   <a class="ctrl<%= @sort == "stars" ? " on" : "" %>" href="<%= Render.search_url(@q, "stars", @filter5) %>">stars</a>
   <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.search_url(@q, "date", @filter5) %>">date</a>
   <span class="ctrl-gap"></span>
-  <span class="ctrl-label">Filter</span>
-  <a class="ctrl<%= @filter5 ? " on" : "" %>" href="<%= Render.search_url(@q, @sort, !@filter5) %>">last 5 years</a>
+  <a class="toggle<%= @filter5 ? " on" : "" %>" href="<%= Render.search_url(@q, @sort, !@filter5) %>">
+    <span class="toggle-track"><span class="toggle-knob"></span></span>
+    last 5 years
+  </a>
 </div>
 <ul class="gem-list">
   <% @results.each do |s| %><%= Render.row(s) %><% end %>

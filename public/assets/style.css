@@ -145,6 +145,27 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .ctrl.on { color: var(--accent); border-color: var(--accent-2); background: var(--accent-soft); font-weight: 600; }
 .ctrl-gap { width: 10px; }
 
+/* toggle switch for the 5-years filter (server-side state, no JS) */
+.toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 3px 12px 3px 8px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface);
+  color: var(--muted); font-size: 13px;
+}
+.toggle:hover { text-decoration: none; color: var(--accent); border-color: var(--accent-2); }
+.toggle.on { color: var(--accent); border-color: var(--accent-2); background: var(--accent-soft); font-weight: 600; }
+.toggle-track {
+  width: 24px; height: 14px; border-radius: 999px; background: #c4cfdb;
+  position: relative; flex-shrink: 0; transition: background .15s;
+}
+.toggle-knob {
+  position: absolute; top: 2px; left: 2px; width: 10px; height: 10px;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+  transition: left .15s;
+}
+.toggle.on .toggle-track { background: var(--accent); }
+.toggle.on .toggle-knob { left: 12px; }
+
 .gem {
   position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
