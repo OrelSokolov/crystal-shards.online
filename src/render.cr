@@ -41,7 +41,8 @@ module Render
 
   class IndexView
     def initialize(@top : Array(Shard), @recent : Array(Shard),
-                   @newest : Array(Shard), @total : Int32, @updated : String)
+                   @newest : Array(Shard), @chart : String,
+                   @total : Int32, @updated : String)
     end
 
     ECR.def_to_s("templates/index.ecr")
@@ -113,13 +114,57 @@ module Render
     top = site.shards.sort_by { |s| -s.stars }.first(10)
     recent = site.shards.sort_by { |s| -(s.pushed_time.to_unix) }.first(10)
     newest = site.shards.sort_by { |s| -(s.created_time.to_unix) }.first(10)
-    content = IndexView.new(top, recent, newest, site.shards.size, site.generated_at).to_s
+    chart = activity_chart(site)
+    content = IndexView.new(top, recent, newest, chart, site.shards.size, site.generated_at).to_s
     page("Crystal Shards — catalog of Crystal libraries",
          "Searchable catalog of Crystal shards on GitHub: #{site.shards.size} libraries organized by category.",
          "/", content)
   end
 
   NEW_PERIODS = {"today" => 1, "week" => 7, "month" => 30, "year" => 365}
+
+  # Inline SVG bar chart: shards created per month over the last *months*.
+  # Server-side generation, no JavaScript — crawlers see the real data.
+  def self.activity_chart(site : SiteData, months = 36) : String
+    this_month = Time.utc.at_beginning_of_month
+    start = this_month - months.months
+
+    buckets = Array(Int32).new(months, 0)
+    site.shards.each do |s|
+      t = s.created_time
+      next if t < start
+      idx = (t.year - start.year) * 12 + (t.month - start.month)
+      buckets[idx] += 1 if idx >= 0 && idx < months
+    end
+
+    w = 760f64
+    h = 140f64
+    pad = 2f64
+    label_h = 18f64
+    bw = (w - pad * 2) / months
+    max = buckets.max? || 1
+    max = 1 if max < 1
+
+    String.build do |io|
+      io << %(<svg class="chart" viewBox="0 0 #{w.to_i} #{(h + label_h).to_i}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New shards by month">)
+      months.times do |i|
+        count = buckets[i]
+        next if count == 0
+        bh = count / max * (h - 6)
+        bh = 2 if bh < 2
+        x = pad + i * bw
+        t = start + i.months
+        label = t.to_s("%b %Y")
+        io << %(<rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect>)
+      end
+      (0...months).step(6) do |i|
+        t = start + i.months
+        x = pad + i * bw
+        io << %(<text class="chart-label" x="#{x.round(2)}" y="#{(h + label_h - 4).to_i}">#{t.to_s("%b %y")}</text>)
+      end
+      io << "</svg>"
+    end
+  end
 
   def self.new_shards(period : String, shards : Array(Shard), total : Int32) : String
     content = NewView.new(period, shards, total).to_s

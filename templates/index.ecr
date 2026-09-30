@@ -55,3 +55,11 @@
   </div>
   <p class="meta-dim landing-note">Catalog generated <%= @updated %> · Browse <a href="/categories">all categories</a></p>
 </section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>New shards by month</h2>
+    <a class="more-link" href="/new?period=year">last year →</a>
+  </div>
+  <%= @chart %>
+</section>

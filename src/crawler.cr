@@ -168,7 +168,9 @@ module Crawler
     pushed_at = item["pushed_at"].as_s
 
     if cached = cache[full_name]?
-      return cached if cached.pushed_at == pushed_at
+      # Reuse only when push date is unchanged AND the record is complete
+      # (older caches lack created_at, needed for the "brand new" listing).
+      return cached if cached.pushed_at == pushed_at && !cached.created_at.empty?
     end
 
     raw = fetch_shard_yml(full_name)

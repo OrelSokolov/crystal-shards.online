@@ -172,6 +172,12 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 
 .landing-note { margin-top: 22px; }
 
+/* server-rendered activity chart */
+.chart { width: 100%; height: auto; display: block; }
+.chart .bar { fill: var(--accent); }
+.chart .bar:hover { fill: var(--accent-2); }
+.chart-label { fill: var(--muted); font-size: 10px; font-family: system-ui, sans-serif; }
+
 /* toggle switch for the 5-years filter (server-side state, no JS) */
 .toggle {
   display: inline-flex; align-items: center; gap: 8px;
