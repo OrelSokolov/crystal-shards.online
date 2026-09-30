@@ -164,15 +164,21 @@ module Render
       io << %(<svg class="chart" viewBox="0 -30 #{w.to_i} #{(h + label_h + 30).to_i}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New shards by month">)
       span.times do |i|
         count = buckets[i]
-        next if count == 0
-        bh = count / max * (h - 6)
-        bh = 2 if bh < 2
         x = pad + i * bw
         t = start + i.months
         ym = t.to_s("%Y-%m")
         label = t.to_s("%b %Y")
         io << %(<g class="bar-g">)
-        io << %(<a class="bar-link" href="/new?month=#{ym}"><rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect></a>)
+        io << %(<a class="bar-link" href="/new?month=#{ym}">)
+        # invisible hit zone spanning the whole column: gapless hover,
+        # no dead space between bars (and zero months stay hoverable)
+        io << %(<rect class="hit" x="#{x.round(2)}" y="-30" width="#{bw.round(2)}" height="#{(h + 30 + label_h).round(2)}" pointer-events="all"/>)
+        if count > 0
+          bh = count / max * (h - 6)
+          bh = 2 if bh < 2
+          io << %(<rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect>)
+        end
+        io << %(</a>)
         # hover readout: fixed top-left corner, big count + month
         io << %(<text class="chart-tip" x="6" y="8"><tspan class="c">#{count}</tspan><tspan class="m" dx="8">#{label}</tspan></text>)
         io << %(</g>)
