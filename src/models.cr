@@ -49,14 +49,14 @@ class Shard
   end
 
   # Maintenance status by repository activity:
-  #   active    — pushed within the last 3 years
-  #   stale     — no pushes for 3..5 years (warning)
-  #   abandoned — no pushes for 5+ years, or archived
+  #   active    — pushed within the last 3 years, not archived
+  #   stale     — no pushes for 3..5 years, or repo archived recently
+  #   abandoned — no pushes for 5+ years
   def status : Symbol
-    return :abandoned if @archived
     days = age_days
     return :abandoned if days > 5 * 365
     return :stale if days > 3 * 365
+    return :stale if @archived
     :active
   end
 
