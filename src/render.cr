@@ -79,10 +79,17 @@ module Render
   end
 
   class NewView
-    def initialize(@period : String, @shards : Array(Shard), @total : Int32)
+    def initialize(@period : String, @month : String?, @shards : Array(Shard), @total : Int32)
     end
 
     ECR.def_to_s("templates/new.ecr")
+  end
+
+  class ActivityView
+    def initialize(@chart : String, @total : Int32, @since : String)
+    end
+
+    ECR.def_to_s("templates/activity.ecr")
   end
 
   class ErrorView
@@ -123,53 +130,77 @@ module Render
 
   NEW_PERIODS = {"today" => 1, "week" => 7, "month" => 30, "year" => 365}
 
-  # Inline SVG bar chart: shards created per month over the last *months*.
-  # Server-side generation, no JavaScript — crawlers see the real data.
-  def self.activity_chart(site : SiteData, months = 36) : String
+  # Inline SVG bar chart: shards created per month. Bars are links to the
+  # per-month listing (/new?month=YYYY-MM). Server-side, no JavaScript.
+  def self.activity_chart(site : SiteData, months = 36, full_history = false) : String
     this_month = Time.utc.at_beginning_of_month
-    start = this_month - months.months
+    start =
+      if full_history
+        first = site.shards.map(&.created_time).select { |t| t.year > 1970 }.min? || this_month
+        first.at_beginning_of_month
+      else
+        this_month - months.months
+      end
+    span = (this_month.year - start.year) * 12 + (this_month.month - start.month) + 1
 
-    buckets = Array(Int32).new(months, 0)
+    buckets = Array(Int32).new(span, 0)
     site.shards.each do |s|
       t = s.created_time
-      next if t < start
+      next if t.year <= 1970
       idx = (t.year - start.year) * 12 + (t.month - start.month)
-      buckets[idx] += 1 if idx >= 0 && idx < months
+      buckets[idx] += 1 if idx >= 0 && idx < span
     end
 
-    w = 760f64
-    h = 140f64
+    w = full_history ? 1100f64 : 760f64
+    h = full_history ? 220f64 : 140f64
     pad = 2f64
     label_h = 18f64
-    bw = (w - pad * 2) / months
+    bw = (w - pad * 2) / span
+    label_every = full_history ? 12 : 6
     max = buckets.max? || 1
     max = 1 if max < 1
 
     String.build do |io|
       io << %(<svg class="chart" viewBox="0 0 #{w.to_i} #{(h + label_h).to_i}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New shards by month">)
-      months.times do |i|
+      span.times do |i|
         count = buckets[i]
         next if count == 0
         bh = count / max * (h - 6)
         bh = 2 if bh < 2
         x = pad + i * bw
         t = start + i.months
+        ym = t.to_s("%Y-%m")
         label = t.to_s("%b %Y")
-        io << %(<rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect>)
+        io << %(<a class="bar-link" href="/new?month=#{ym}"><rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect></a>)
       end
-      (0...months).step(6) do |i|
+      (0...span).step(label_every) do |i|
         t = start + i.months
         x = pad + i * bw
-        io << %(<text class="chart-label" x="#{x.round(2)}" y="#{(h + label_h - 4).to_i}">#{t.to_s("%b %y")}</text>)
+        text = full_history ? t.to_s("%Y") : t.to_s("%b %y")
+        io << %(<text class="chart-label" x="#{x.round(2)}" y="#{(h + label_h - 4).to_i}">#{text}</text>)
       end
       io << "</svg>"
     end
   end
 
-  def self.new_shards(period : String, shards : Array(Shard), total : Int32) : String
-    content = NewView.new(period, shards, total).to_s
-    title = NEW_PERIODS[period]? ? "New shards — last #{period}" : "New shards"
+  def self.month_title(month : String) : String
+    Time.parse("#{month}-01", "%Y-%m-%d", Time::Location::UTC).to_s("%B %Y")
+  rescue
+    month
+  end
+
+  def self.new_shards(period : String, month : String?, shards : Array(Shard), total : Int32) : String
+    content = NewView.new(period, month, shards, total).to_s
+    title = month ? "New shards — #{month_title(month)}" : "New shards — last #{period}"
     page(title, "Crystal shards created recently", "/new", content)
+  end
+
+  def self.activity(site : SiteData) : String
+    since = site.shards.map(&.created_time).select { |t| t.year > 1970 }.min?
+    content = ActivityView.new(activity_chart(site, full_history: true),
+                               site.shards.size,
+                               since.try(&.to_s("%B %Y")) || "—").to_s
+    page("Activity — Crystal Shards", "Crystal shards created per month, full history", "/activity", content)
   end
 
   def self.search(q : String, results : Array(Shard), total : Int32,

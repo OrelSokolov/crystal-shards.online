@@ -1,8 +1,17 @@
-<nav class="crumbs"><a href="/">Home</a> <span>/</span> Brand new</nav>
+<nav class="crumbs"><a href="/">Home</a> <span>/</span> <a href="/activity">Activity</a> <span>/</span> <%= @month ? Render.month_title(@month.not_nil!) : "Brand new" %></nav>
 <div class="section-head">
-  <h1>Brand new</h1>
-  <span class="meta-dim"><%= @shards.size %> shards created in the selected period</span>
+  <h1><% if @month %>New shards — <%= Render.month_title(@month.not_nil!) %><% else %>Brand new<% end %></h1>
+  <span class="meta-dim">
+    <%= @shards.size %> shards created <% if @month %>this month<% else %>in the selected period<% end %>
+  </span>
 </div>
+<% if @month %>
+<div class="list-controls" role="navigation">
+  <a class="ctrl" href="/activity">← back to chart</a>
+  <span class="ctrl-gap"></span>
+  <a class="ctrl" href="/new?period=month">recent months view</a>
+</div>
+<% else %>
 <div class="list-controls" role="navigation" aria-label="Period">
   <span class="ctrl-label">Period:</span>
   <span class="seg">
@@ -11,6 +20,7 @@
     <% end %>
   </span>
 </div>
+<% end %>
 <ul class="gem-list">
   <% @shards.each do |s| %><%= Render.row(s) %><% end %>
 </ul>

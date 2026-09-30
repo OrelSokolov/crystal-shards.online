@@ -30,6 +30,8 @@ module Catalog
         return search(context)
       elsif path == "/new"
         return newly(context)
+      elsif path == "/activity"
+        return activity(context)
       elsif path.starts_with?("/category/") && !path.ends_with?(".html")
         return category(context)
       end
@@ -71,17 +73,40 @@ module Catalog
 
     private def newly(context : HTTP::Server::Context)
       params = HTTP::Params.parse(context.request.query || "")
+      site = current_site
+
+      if month = params["month"]?
+        return call_next(context) unless month =~ /^\d{4}-\d{2}$/
+        y = month[0, 4].to_i
+        m = month[5, 2].to_i
+        shards = site.shards
+          .select { |s| s.created_time.year == y && s.created_time.month == m }
+          .sort_by { |s| -s.created_time.to_unix }
+        html = Render.new_shards("month", month, shards, site.shards.size)
+        context.response.content_type = "text/html; charset=utf-8"
+        context.response.headers["Cache-Control"] = "public, max-age=300"
+        context.response.print html
+        return
+      end
+
       period = params["period"]? || "week"
       days = Render::NEW_PERIODS[period]?
       return call_next(context) unless days # unknown period -> 404
 
-      site = current_site
       cutoff = Time.utc - Time::Span.new(days: days)
       shards = site.shards
         .select { |s| s.created_time > cutoff }
         .sort_by { |s| -s.created_time.to_unix }
 
-      html = Render.new_shards(period, shards, site.shards.size)
+      html = Render.new_shards(period, nil, shards, site.shards.size)
+      context.response.content_type = "text/html; charset=utf-8"
+      context.response.headers["Cache-Control"] = "public, max-age=300"
+      context.response.print html
+    end
+
+    private def activity(context : HTTP::Server::Context)
+      site = current_site
+      html = Render.activity(site)
       context.response.content_type = "text/html; charset=utf-8"
       context.response.headers["Cache-Control"] = "public, max-age=300"
       context.response.print html
