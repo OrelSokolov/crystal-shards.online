@@ -1,0 +1,16 @@
+<nav class="crumbs"><a href="/">Home</a> <span>/</span> Brand new</nav>
+<div class="section-head">
+  <h1>Brand new</h1>
+  <span class="meta-dim"><%= @shards.size %> shards created in the selected period</span>
+</div>
+<div class="list-controls" role="navigation" aria-label="Period">
+  <span class="ctrl-label">Period:</span>
+  <span class="seg">
+    <% {"today", "week", "month", "year"}.each do |p| %>
+    <a class="ctrl<%= @period == p ? " on" : "" %>" href="/new?period=<%= p %>"><%= p %></a>
+    <% end %>
+  </span>
+</div>
+<ul class="gem-list">
+  <% @shards.each do |s| %><%= Render.row(s) %><% end %>
+</ul>

@@ -218,6 +218,7 @@ module Crawler
       issues: item["open_issues_count"].as_i,
       html_url: item["html_url"].as_s,
       pushed_at: item["pushed_at"].as_s,
+      created_at: item["created_at"].as_s,
       archived: item["archived"].as_bool? || false,
       topics: item["topics"].as_a?.try(&.map &.as_s) || [] of String,
     ).tap { |s| s.category = category_for(s.topics, s.description) }

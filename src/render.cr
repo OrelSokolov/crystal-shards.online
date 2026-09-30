@@ -41,7 +41,7 @@ module Render
 
   class IndexView
     def initialize(@top : Array(Shard), @recent : Array(Shard),
-                   @cats : Array(Tuple(String, Int32)), @total : Int32, @updated : String)
+                   @newest : Array(Shard), @total : Int32, @updated : String)
     end
 
     ECR.def_to_s("templates/index.ecr")
@@ -77,6 +77,13 @@ module Render
     ECR.def_to_s("templates/category.ecr")
   end
 
+  class NewView
+    def initialize(@period : String, @shards : Array(Shard), @total : Int32)
+    end
+
+    ECR.def_to_s("templates/new.ecr")
+  end
+
   class ErrorView
     def initialize(@code : Int32, @message : String)
     end
@@ -103,13 +110,21 @@ module Render
   end
 
   def self.index(site : SiteData) : String
-    top = site.shards.sort_by { |s| -s.stars }.first(12)
-    recent = site.shards.sort_by { |s| -(s.pushed_time.to_unix) }.first(12)
-    content = IndexView.new(top, recent, category_counts(site.shards),
-                            site.shards.size, site.generated_at).to_s
+    top = site.shards.sort_by { |s| -s.stars }.first(10)
+    recent = site.shards.sort_by { |s| -(s.pushed_time.to_unix) }.first(10)
+    newest = site.shards.sort_by { |s| -(s.created_time.to_unix) }.first(10)
+    content = IndexView.new(top, recent, newest, site.shards.size, site.generated_at).to_s
     page("Crystal Shards — catalog of Crystal libraries",
          "Searchable catalog of Crystal shards on GitHub: #{site.shards.size} libraries organized by category.",
          "/", content)
+  end
+
+  NEW_PERIODS = {"today" => 1, "week" => 7, "month" => 30, "year" => 365}
+
+  def self.new_shards(period : String, shards : Array(Shard), total : Int32) : String
+    content = NewView.new(period, shards, total).to_s
+    title = NEW_PERIODS[period]? ? "New shards — last #{period}" : "New shards"
+    page(title, "Crystal shards created recently", "/new", content)
   end
 
   def self.search(q : String, results : Array(Shard), total : Int32,

@@ -15,6 +15,7 @@ class Shard
   property issues : Int32
   property html_url : String
   property pushed_at : String    # ISO 8601 from GitHub
+  property created_at : String = "" # ISO 8601 from GitHub — used for "brand new"
   property archived : Bool
   property topics : Array(String)
   property category : String
@@ -22,7 +23,7 @@ class Shard
   def initialize(@full_name, @name, @description = "", @homepage = "",
                  @version = "", @license = "", @authors = "",
                  @stars = 0, @forks = 0, @issues = 0, @html_url = "",
-                 @pushed_at = "", @archived = false,
+                 @pushed_at = "", @created_at = "", @archived = false,
                  @topics = [] of String, @category = "misc")
   end
 
@@ -38,6 +39,16 @@ class Shard
     Time.parse_iso8601(@pushed_at) || Time.utc(1970, 1, 1)
   rescue
     Time.utc(1970, 1, 1)
+  end
+
+  def created_time : Time
+    Time.parse_iso8601(@created_at) || Time.utc(1970, 1, 1)
+  rescue
+    Time.utc(1970, 1, 1)
+  end
+
+  def created_fmt : String
+    created_time.to_s("%b %d, %Y")
   end
 
   def pushed_fmt : String

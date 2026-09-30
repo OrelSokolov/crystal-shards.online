@@ -28,6 +28,8 @@ module Catalog
 
       if path == "/search"
         return search(context)
+      elsif path == "/new"
+        return newly(context)
       elsif path.starts_with?("/category/") && !path.ends_with?(".html")
         return category(context)
       end
@@ -64,6 +66,24 @@ module Catalog
       html = Render.search(q, results, base.size, sort, filter5)
       context.response.content_type = "text/html; charset=utf-8"
       context.response.headers["Cache-Control"] = "public, max-age=60"
+      context.response.print html
+    end
+
+    private def newly(context : HTTP::Server::Context)
+      params = HTTP::Params.parse(context.request.query || "")
+      period = params["period"]? || "week"
+      days = Render::NEW_PERIODS[period]?
+      return call_next(context) unless days # unknown period -> 404
+
+      site = current_site
+      cutoff = Time.utc - Time::Span.new(days: days)
+      shards = site.shards
+        .select { |s| s.created_time > cutoff }
+        .sort_by { |s| -s.created_time.to_unix }
+
+      html = Render.new_shards(period, shards, site.shards.size)
+      context.response.content_type = "text/html; charset=utf-8"
+      context.response.headers["Cache-Control"] = "public, max-age=300"
       context.response.print html
     end
 

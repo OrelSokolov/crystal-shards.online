@@ -9,30 +9,49 @@
 </section>
 
 <section class="home-section">
-  <h2>Browse by category</h2>
-  <div class="chip-cloud">
-    <% @cats.each do |(slug, n)| %>
-      <a class="chip chip-lg" href="/category/<%= slug %>"><%= category_title(slug) %> <span class="chip-n"><%= n %></span></a>
-    <% end %>
+  <div class="cols3">
+    <div class="col3">
+      <div class="section-head">
+        <h2>Most starred</h2>
+        <a class="more-link" href="/search?sort=stars" title="All popular shards">→</a>
+      </div>
+      <ul class="col-list">
+        <% @top.each do |s| %>
+        <li class="mini">
+          <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
+          <span class="mini-side">★ <%= s.stars %></span>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col3">
+      <div class="section-head">
+        <h2>Recently updated</h2>
+        <a class="more-link" href="/search?sort=date" title="All recent updates">→</a>
+      </div>
+      <ul class="col-list">
+        <% @recent.each do |s| %>
+        <li class="mini">
+          <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
+          <span class="mini-side <%= s.status_css %>"><%= s.pushed_fmt %></span>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col3">
+      <div class="section-head">
+        <h2>Brand new</h2>
+        <a class="more-link" href="/new?period=week" title="New shards by period">→</a>
+      </div>
+      <ul class="col-list">
+        <% @newest.each do |s| %>
+        <li class="mini">
+          <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
+          <span class="mini-side"><%= s.created_fmt %></span>
+        </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-</section>
-
-<section class="home-section">
-  <div class="section-head">
-    <h2>Most starred</h2>
-    <a class="more-link" href="/categories">All categories →</a>
-  </div>
-  <div class="card-grid">
-    <% @top.each do |s| %><%= Render.card(s) %><% end %>
-  </div>
-</section>
-
-<section class="home-section">
-  <div class="section-head">
-    <h2>Recently updated</h2>
-    <span class="meta-dim">catalog generated <%= @updated %></span>
-  </div>
-  <div class="card-grid">
-    <% @recent.each do |s| %><%= Render.card(s) %><% end %>
-  </div>
+  <p class="meta-dim landing-note">Catalog generated <%= @updated %> · Browse <a href="/categories">all categories</a></p>
 </section>
