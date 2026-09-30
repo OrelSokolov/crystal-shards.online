@@ -4,7 +4,7 @@
   <span class="meta-dim"><%= @shards.size %> shards</span>
 </div>
 <div class="list-controls" role="navigation" aria-label="Listing controls">
-  <span class="ctrl-label">Sort</span>
+  <span class="ctrl-label">Sort by:</span>
   <a class="ctrl<%= (@sort.nil? || @sort == "stars") ? " on" : "" %>" href="<%= Render.category_url(@slug, "stars", @filter5) %>">stars</a>
   <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.category_url(@slug, "date", @filter5) %>">date</a>
   <span class="ctrl-gap"></span>
