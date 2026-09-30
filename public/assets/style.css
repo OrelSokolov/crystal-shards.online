@@ -145,6 +145,15 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .ctrl.on { color: var(--accent); border-color: var(--accent-2); background: var(--accent-soft); font-weight: 600; }
 .ctrl-gap { width: 10px; }
 
+/* segmented control: joined sort buttons */
+.seg {
+  display: inline-flex; border: 1px solid var(--line);
+  border-radius: 999px; background: var(--surface); overflow: hidden;
+}
+.seg .ctrl { border: none; border-radius: 0; background: transparent; }
+.seg .ctrl + .ctrl { border-left: 1px solid var(--line); }
+.seg .ctrl.on { background: var(--accent-soft); }
+
 /* toggle switch for the 5-years filter (server-side state, no JS) */
 .toggle {
   display: inline-flex; align-items: center; gap: 8px;

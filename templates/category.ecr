@@ -5,8 +5,10 @@
 </div>
 <div class="list-controls" role="navigation" aria-label="Listing controls">
   <span class="ctrl-label">Sort by:</span>
-  <a class="ctrl<%= (@sort.nil? || @sort == "stars") ? " on" : "" %>" href="<%= Render.category_url(@slug, "stars", @filter5) %>">stars</a>
-  <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.category_url(@slug, "date", @filter5) %>">date</a>
+  <span class="seg">
+    <a class="ctrl<%= (@sort.nil? || @sort == "stars") ? " on" : "" %>" href="<%= Render.category_url(@slug, "stars", @filter5) %>">stars</a>
+    <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.category_url(@slug, "date", @filter5) %>">date</a>
+  </span>
   <span class="ctrl-gap"></span>
   <a class="toggle<%= @filter5 ? " on" : "" %>" href="<%= Render.category_url(@slug, @sort, !@filter5) %>">
     <span class="toggle-track"><span class="toggle-knob"></span></span>

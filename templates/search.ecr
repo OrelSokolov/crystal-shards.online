@@ -17,9 +17,11 @@
 </div>
 <div class="list-controls" role="navigation" aria-label="Listing controls">
   <span class="ctrl-label">Sort by:</span>
-  <a class="ctrl<%= @sort.to_s.empty? ? " on" : "" %>" href="<%= Render.search_url(@q, nil, @filter5) %>">relevance</a>
-  <a class="ctrl<%= @sort == "stars" ? " on" : "" %>" href="<%= Render.search_url(@q, "stars", @filter5) %>">stars</a>
-  <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.search_url(@q, "date", @filter5) %>">date</a>
+  <span class="seg">
+    <a class="ctrl<%= @sort.to_s.empty? ? " on" : "" %>" href="<%= Render.search_url(@q, nil, @filter5) %>">relevance</a>
+    <a class="ctrl<%= @sort == "stars" ? " on" : "" %>" href="<%= Render.search_url(@q, "stars", @filter5) %>">stars</a>
+    <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.search_url(@q, "date", @filter5) %>">date</a>
+  </span>
   <span class="ctrl-gap"></span>
   <a class="toggle<%= @filter5 ? " on" : "" %>" href="<%= Render.search_url(@q, @sort, !@filter5) %>">
     <span class="toggle-track"><span class="toggle-knob"></span></span>
