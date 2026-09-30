@@ -183,8 +183,8 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 }
 .badge-lg { font-size: 13px; }
 .badge-ok { color: #1a7f37; background: #dff2e4; }
-.badge-warn { color: #9a6700; background: #fdf0d2; }
-.badge-bad { color: var(--danger); background: #faeceb; }
+.badge-warn { color: #6b5210; background: #fae48d; }
+.badge-bad { color: #b3271e; background: #f9d3ce; }
 
 .card-desc { margin: 0 0 10px; color: var(--muted); font-size: 14.5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
