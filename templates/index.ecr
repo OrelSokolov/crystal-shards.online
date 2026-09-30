@@ -18,6 +18,7 @@
       <ul class="col-list">
         <% @top.each do |s| %>
         <li class="mini">
+          <a class="cover" href="/shards/<%= HTML.escape(s.full_name) %>" aria-hidden="true" tabindex="-1"></a>
           <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
           <span class="mini-side">★ <%= s.stars %></span>
         </li>
@@ -32,6 +33,7 @@
       <ul class="col-list">
         <% @recent.each do |s| %>
         <li class="mini">
+          <a class="cover" href="/shards/<%= HTML.escape(s.full_name) %>" aria-hidden="true" tabindex="-1"></a>
           <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
           <span class="mini-side <%= s.status_css %>"><%= s.pushed_fmt %></span>
         </li>
@@ -46,6 +48,7 @@
       <ul class="col-list">
         <% @newest.each do |s| %>
         <li class="mini">
+          <a class="cover" href="/shards/<%= HTML.escape(s.full_name) %>" aria-hidden="true" tabindex="-1"></a>
           <span class="mini-name"><a href="/shards/<%= HTML.escape(s.full_name) %>"><%= HTML.escape(s.name) %></a><span class="mini-path"><%= HTML.escape(s.full_name) %></span></span>
           <span class="mini-side"><%= s.created_fmt %></span>
         </li>

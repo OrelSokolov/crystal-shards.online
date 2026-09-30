@@ -169,9 +169,11 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .col-new .col-list { margin: 0 -4px; }
 
 .mini {
+  position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   padding: 7px 2px; border-bottom: 1px solid var(--line); font-size: 14px;
 }
+.mini .cover { border-radius: 4px; }
 .mini-name { min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
 .mini-name a { font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mini-name a:hover { color: var(--accent); text-decoration: none; }
