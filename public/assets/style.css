@@ -132,14 +132,15 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .card-list { display: flex; flex-direction: column; gap: 12px; max-width: 780px; }
 
 /* rubygems-style flat result rows */
-.gem-list { list-style: none; margin: 8px 0 0; padding: 0; max-width: 860px; }
+.gem-list { list-style: none; margin: 8px 0 0; padding: 0; }
 
 .gem {
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  padding: 14px 10px; border-bottom: 1px solid var(--line);
+  padding: 14px 18px; background: var(--surface);
+  border-bottom: 1px solid var(--line);
 }
 .gem:first-child { border-top: 1px solid var(--line); }
-.gem:hover { background: #eef3f8; }
+.gem:hover { background: #f4f8fc; }
 
 .gem-body { min-width: 0; }
 
