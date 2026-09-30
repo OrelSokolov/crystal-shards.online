@@ -3,11 +3,11 @@
   <div class="gem-body">
     <div class="gem-title">
       <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
+      <span class="gem-path"><%= HTML.escape(@shard.full_name) %></span>
     </div>
     <p class="gem-desc"><%= HTML.escape(@shard.description.empty? ? "No description." : @shard.description) %></p>
     <div class="gem-meta">
       <a class="chip" href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a>
-      <span class="meta-dim"><%= HTML.escape(@shard.full_name) %></span>
     </div>
   </div>
   <div class="gem-side">
