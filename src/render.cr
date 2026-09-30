@@ -37,7 +37,8 @@ module Render
   end
 
   class SearchView
-    def initialize(@q : String, @results : Array(Shard), @total : Int32)
+    def initialize(@q : String, @results : Array(Shard), @total : Int32,
+                   @sort : String?, @filter5 : Bool)
     end
 
     ECR.def_to_s("templates/search.ecr")
@@ -58,7 +59,8 @@ module Render
   end
 
   class CategoryView
-    def initialize(@slug : String, @title : String, @shards : Array(Shard))
+    def initialize(@slug : String, @title : String, @shards : Array(Shard),
+                   @sort : String?, @filter5 : Bool)
     end
 
     ECR.def_to_s("templates/category.ecr")
@@ -99,9 +101,10 @@ module Render
          "/", content)
   end
 
-  def self.search(q : String, results : Array(Shard), total : Int32) : String
-    content = SearchView.new(q, results, total).to_s
-    page("#{q} — search results", "Crystal shards matching “#{q}”", "/search", content)
+  def self.search(q : String, results : Array(Shard), total : Int32,
+                  sort : String? = nil, filter5 : Bool = false) : String
+    content = SearchView.new(q, results, total, sort, filter5).to_s
+    page("#{q.empty? ? "Search" : "#{q} — search results"}", "Crystal shards matching “#{q}”", "/search", content)
   end
 
   def self.shard_page(s : Shard, all : Array(Shard)) : String
@@ -119,8 +122,9 @@ module Render
     page("Categories — Crystal Shards", "All Crystal shard categories", "/categories", content)
   end
 
-  def self.category(slug : String, shards : Array(Shard)) : String
-    content = CategoryView.new(slug, category_title(slug), shards).to_s
+  def self.category(slug : String, shards : Array(Shard),
+                    sort : String? = nil, filter5 : Bool = false) : String
+    content = CategoryView.new(slug, category_title(slug), shards, sort, filter5).to_s
     page("#{category_title(slug)} — Crystal Shards",
          "Crystal shards in #{category_title(slug)}", "/category/#{slug}", content)
   end
@@ -144,5 +148,21 @@ module Render
 
   private def self.url(io, path : String)
     io << "<url><loc>" << HTML.escape("#{BASE_URL}#{path}") << "</loc></url>\n"
+  end
+
+  # Query-string builders for sort/filter controls (no-JS, plain links).
+  def self.search_url(q : String, sort : String?, filter5 : Bool) : String
+    params = [] of String
+    params << "q=#{URI.encode_path(q)}" unless q.empty?
+    params << "sort=#{sort}" if sort && !sort.empty?
+    params << "filter=5y" if filter5
+    params.empty? ? "/search" : "/search?#{params.join("&")}"
+  end
+
+  def self.category_url(slug : String, sort : String?, filter5 : Bool) : String
+    params = [] of String
+    params << "sort=#{sort}" if sort && !sort.empty?
+    params << "filter=5y" if filter5
+    params.empty? ? "/category/#{slug}" : "/category/#{slug}?#{params.join("&")}"
   end
 end

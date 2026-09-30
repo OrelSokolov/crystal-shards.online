@@ -238,11 +238,6 @@ module Crawler
     write.call("index.html", Render.index(site))
     write.call("categories/index.html", Render.categories(site))
 
-    Render.category_counts(site.shards).each do |(slug, _)|
-      shards = site.shards.select(&.category.==(slug))
-      write.call("category/#{slug}/index.html", Render.category(slug, shards))
-    end
-
     site.shards.each do |s|
       write.call("shards/#{s.full_name}.html", Render.shard_page(s, site.shards))
     end

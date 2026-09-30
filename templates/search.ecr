@@ -15,6 +15,15 @@
     <p class="meta-dim"><%= @results.size %> of <%= @total %> shards match “<%= HTML.escape(@q) %>”.</p>
   <% end %>
 </div>
+<div class="list-controls" role="navigation" aria-label="Listing controls">
+  <span class="ctrl-label">Sort</span>
+  <a class="ctrl<%= @sort.to_s.empty? ? " on" : "" %>" href="<%= Render.search_url(@q, nil, @filter5) %>">relevance</a>
+  <a class="ctrl<%= @sort == "stars" ? " on" : "" %>" href="<%= Render.search_url(@q, "stars", @filter5) %>">stars</a>
+  <a class="ctrl<%= @sort == "date" ? " on" : "" %>" href="<%= Render.search_url(@q, "date", @filter5) %>">date</a>
+  <span class="ctrl-gap"></span>
+  <span class="ctrl-label">Filter</span>
+  <a class="ctrl<%= @filter5 ? " on" : "" %>" href="<%= Render.search_url(@q, @sort, !@filter5) %>">last 5 years</a>
+</div>
 <ul class="gem-list">
   <% @results.each do |s| %><%= Render.row(s) %><% end %>
 </ul>

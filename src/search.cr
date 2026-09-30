@@ -2,6 +2,26 @@
 # Corpus is ~10k records, so a scoring scan per query is well under a
 # millisecond — no inverted index needed.
 
+module Listing
+  FIVE_YEARS = Time::Span.new(days: 5 * 365)
+
+  # "last 5 years" filter: drop shards not pushed within the window.
+  def self.filtered(shards : Array(Shard), active : Bool) : Array(Shard)
+    return shards unless active
+    cutoff = Time.utc - FIVE_YEARS
+    shards.select { |s| s.pushed_time > cutoff }
+  end
+
+  # sort: nil = keep incoming order (search relevance), "stars", "date".
+  def self.sorted(shards : Array(Shard), sort : String?) : Array(Shard)
+    case sort
+    when "date"  then shards.sort_by { |s| -s.pushed_time.to_unix }
+    when "stars" then shards.sort_by { |s| -s.stars }
+    else shards
+    end
+  end
+end
+
 class ShardSearch
   def initialize(@shards : Array(Shard))
   end

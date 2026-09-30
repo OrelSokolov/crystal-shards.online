@@ -28,13 +28,15 @@ module Catalog
 
       if path == "/search"
         return search(context)
+      elsif path.starts_with?("/category/") && !path.ends_with?(".html")
+        return category(context)
       end
 
       # Clean URLs: rewrite to the pre-generated index.html of the section.
       if path == "/"
         context.request.path = "/index.html"
-      elsif path == "/categories" || (path.starts_with?("/category/") && !path.ends_with?(".html"))
-        context.request.path = path.chomp("/") + "/index.html"
+      elsif path == "/categories"
+        context.request.path = "/categories/index.html"
       elsif path.starts_with?("/shards/") && !path.ends_with?(".html")
         context.request.path = path + ".html"
       end
@@ -43,17 +45,46 @@ module Catalog
     end
 
     private def search(context : HTTP::Server::Context)
-      q = HTTP::Params.parse(context.request.query || "")["q"]?.to_s
+      params = HTTP::Params.parse(context.request.query || "")
+      q = params["q"]?.to_s
+      sort = params["sort"]?
+      filter5 = params["filter"]? == "5y"
+
       site = current_site
+      base = Listing.filtered(site.shards, filter5)
+
       if q.strip.empty?
         # Empty query: fall back to the most starred shards instead of a dead end.
-        results = site.shards.sort_by { |s| -s.stars }.first(30)
+        results = Listing.sorted(base, sort || "stars").first(30)
       else
-        results = ShardSearch.new(site.shards).query(q)
+        results = ShardSearch.new(base).query(q)
+        results = Listing.sorted(results, sort)
       end
-      html = Render.search(q, results, site.shards.size)
+
+      html = Render.search(q, results, base.size, sort, filter5)
       context.response.content_type = "text/html; charset=utf-8"
       context.response.headers["Cache-Control"] = "public, max-age=60"
+      context.response.print html
+    end
+
+    private def category(context : HTTP::Server::Context)
+      slug = context.request.path.split("/")[2]?.to_s.chomp("/")
+      params = HTTP::Params.parse(context.request.query || "")
+      sort = params["sort"]?
+      filter5 = params["filter"]? == "5y"
+
+      site = current_site
+      shards = site.shards.select(&.category.==(slug))
+
+      if shards.empty? && !CATEGORY_TITLES[slug]?
+        call_next(context) # unknown category -> 404
+        return
+      end
+
+      shards = Listing.sorted(Listing.filtered(shards, filter5), sort || "stars")
+      html = Render.category(slug, shards, sort, filter5)
+      context.response.content_type = "text/html; charset=utf-8"
+      context.response.headers["Cache-Control"] = "public, max-age=300"
       context.response.print html
     end
 

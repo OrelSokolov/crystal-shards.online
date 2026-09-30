@@ -134,6 +134,17 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 /* rubygems-style flat result rows */
 .gem-list { list-style: none; margin: 8px 0 0; padding: 0; }
 
+/* server-side sort/filter controls (plain links, no JS) */
+.list-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 6px; font-size: 13px; }
+.ctrl-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.ctrl {
+  display: inline-block; padding: 3px 12px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+}
+.ctrl:hover { text-decoration: none; color: var(--accent); border-color: var(--accent-2); }
+.ctrl.on { color: var(--accent); border-color: var(--accent-2); background: var(--accent-soft); font-weight: 600; }
+.ctrl-gap { width: 10px; }
+
 .gem {
   position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
