@@ -9,7 +9,7 @@
   <meta property="og:title" content="<%= HTML.escape(@title) %>">
   <meta property="og:description" content="<%= HTML.escape(@desc) %>">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=<%= Render.asset_v %>">
 </head>
 <body>
 <header class="site-header">

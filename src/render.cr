@@ -7,6 +7,17 @@ require "json"
 module Render
   BASE_URL = ENV.fetch("BASE_URL", "https://crystal-shards.online")
 
+  # Cache-busting version for /assets/style.css: the file's mtime, so a
+  # changed stylesheet gets a new URL and browsers never serve stale CSS.
+  def self.asset_v : String
+    @@asset_v ||= begin
+      path = File.join(ENV.fetch("PUBLIC_DIR", "public"), "assets/style.css")
+      File.info?(path).try(&.modification_time.to_unix.to_s) || "1"
+    end
+  end
+
+  @@asset_v : String? = nil
+
   class PageView
     def initialize(@title : String, @desc : String, @canonical : String, @content : String)
     end
