@@ -3,6 +3,6 @@
   <h1><%= @title %></h1>
   <span class="meta-dim"><%= @shards.size %> shards</span>
 </div>
-<div class="card-list">
-  <% @shards.each do |s| %><%= Render.card(s) %><% end %>
-</div>
+<ul class="gem-list">
+  <% @shards.each do |s| %><%= Render.row(s) %><% end %>
+</ul>

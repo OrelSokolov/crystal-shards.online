@@ -21,6 +21,13 @@ module Render
     ECR.def_to_s("templates/_card.ecr")
   end
 
+  class RowView
+    def initialize(@shard : Shard)
+    end
+
+    ECR.def_to_s("templates/_row.ecr")
+  end
+
   class IndexView
     def initialize(@top : Array(Shard), @recent : Array(Shard),
                    @cats : Array(Tuple(String, Int32)), @total : Int32, @updated : String)
@@ -70,6 +77,10 @@ module Render
 
   def self.card(s : Shard) : String
     CardView.new(s).to_s
+  end
+
+  def self.row(s : Shard) : String
+    RowView.new(s).to_s
   end
 
   def self.category_counts(shards : Array(Shard)) : Array(Tuple(String, Int32))
