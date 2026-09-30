@@ -1,17 +1,17 @@
 /* Crystal Shards — no-JS catalog. Light, violet accent, rubygems-style search. */
 
 :root {
-  --bg: #fafafa;
+  --bg: #f5f7fa;
   --surface: #ffffff;
-  --text: #1a1a2e;
-  --muted: #6b6b80;
-  --line: #e6e6ef;
-  --accent: #5b4bef;
-  --accent-soft: #eeecff;
-  --accent-2: #8f7bff;
+  --text: #1c2733;
+  --muted: #64748b;
+  --line: #dfe6ee;
+  --accent: #446e9b;
+  --accent-soft: #e9f0f7;
+  --accent-2: #7096b8;
   --danger: #b3382f;
   --radius: 12px;
-  --shadow: 0 1px 2px rgba(26, 26, 46, .05), 0 4px 16px rgba(26, 26, 46, .06);
+  --shadow: 0 1px 2px rgba(28, 39, 51, .05), 0 4px 16px rgba(28, 39, 51, .06);
 }
 
 * { box-sizing: border-box; }
@@ -50,10 +50,32 @@ code, pre, .ver { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, mo
 }
 .brand:hover { text-decoration: none; color: var(--accent); }
 
-.brand-mark {
-  width: 14px; height: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  transform: rotate(45deg); border-radius: 3px; display: inline-block;
+.brand-mark { display: none; }
+
+.brand { perspective: 200px; }
+
+/* Rotating 3D crystal — three crossed diamond planes, pure CSS */
+.crys {
+  --cs: 18px;
+  position: relative; display: inline-block;
+  width: var(--cs); height: calc(var(--cs) * 1.4);
+  transform-style: preserve-3d;
+  animation: crys-spin 9s linear infinite;
 }
+.crys .plane { position: absolute; inset: 0; transform-style: preserve-3d; }
+.crys .p2 { transform: rotateY(60deg); }
+.crys .p3 { transform: rotateY(120deg); }
+.crys .t { position: absolute; left: 0; width: 100%; height: 50%; }
+.crys .top { top: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: linear-gradient(180deg, #a3bcd4, #6d94b8); }
+.crys .bot { top: 50%; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(180deg, #446e9b, #2c4864); }
+@keyframes crys-spin {
+  from { transform: rotateX(-14deg) rotateY(0deg); }
+  to   { transform: rotateX(-14deg) rotateY(360deg); }
+}
+@media (prefers-reduced-motion: reduce) { .crys { animation: none; } }
+
+.hero-crystal { perspective: 500px; margin-bottom: 18px; }
+.hero-crystal .crys { --cs: 64px; animation-duration: 14s; }
 
 .header-search { flex: 1; max-width: 420px; }
 .header-search input {
@@ -120,13 +142,19 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .card-title a:hover { color: var(--accent); text-decoration: none; }
 
 .ver {
-  font-size: 12px; color: var(--accent); background: var(--accent-soft);
-  padding: 1px 8px; border-radius: 999px;
+  font-size: 11.5px; color: var(--muted); background: #f1f1f6;
+  padding: 1px 7px; border-radius: 5px; font-weight: 400;
 }
-.ver-lg { font-size: 14px; }
+.ver-lg { font-size: 13px; }
 
-.badge { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
-.badge-warn { color: var(--danger); background: #faeceb; }
+.badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px;
+}
+.badge-lg { font-size: 13px; }
+.badge-ok { color: #1a7f37; background: #dff2e4; }
+.badge-warn { color: #9a6700; background: #fdf0d2; }
+.badge-bad { color: var(--danger); background: #faeceb; }
 
 .card-desc { margin: 0 0 10px; color: var(--muted); font-size: 14.5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 

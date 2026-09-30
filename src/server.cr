@@ -45,7 +45,12 @@ module Catalog
     private def search(context : HTTP::Server::Context)
       q = HTTP::Params.parse(context.request.query || "")["q"]?.to_s
       site = current_site
-      results = ShardSearch.new(site.shards).query(q)
+      if q.strip.empty?
+        # Empty query: fall back to the most starred shards instead of a dead end.
+        results = site.shards.sort_by { |s| -s.stars }.first(30)
+      else
+        results = ShardSearch.new(site.shards).query(q)
+      end
       html = Render.search(q, results, site.shards.size)
       context.response.content_type = "text/html; charset=utf-8"
       context.response.headers["Cache-Control"] = "public, max-age=60"

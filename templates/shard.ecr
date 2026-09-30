@@ -4,7 +4,14 @@
   <header class="shard-head">
     <h1><%= HTML.escape(@shard.name) %>
       <% if !@shard.version.empty? %><span class="ver ver-lg"><%= HTML.escape(@shard.version) %></span><% end %>
-      <% if @shard.archived %><span class="badge badge-warn">unmaintained</span><% end %>
+      <% st = @shard.status %>
+      <% if st == :active %>
+      <span class="badge badge-ok badge-lg"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M6.3 12.2 2.8 8.7l1.4-1.4 2.1 2.1 5.5-5.5 1.4 1.4-6.9 6.9z"/></svg>active</span>
+      <% elsif st == :stale %>
+      <span class="badge badge-warn badge-lg">stale</span>
+      <% else %>
+      <span class="badge badge-bad badge-lg">abandoned</span>
+      <% end %>
     </h1>
     <p class="shard-fullname">by <a href="https://github.com/<%= HTML.escape(@shard.owner) %>" rel="noopener"><%= HTML.escape(@shard.owner) %></a> / <%= HTML.escape(@shard.repo) %></p>
     <p class="shard-desc"><%= HTML.escape(@shard.description.empty? ? "No description provided." : @shard.description) %></p>

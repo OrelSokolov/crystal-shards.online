@@ -73,11 +73,16 @@ module Crawler
     cache = old.shards.index_by &.full_name
     STDERR.puts "cache: #{cache.size} shards from previous run"
 
-    repos = collect_repos(gh, limit)
-    STDERR.puts "discovered #{repos.size} non-fork Crystal repos"
+    if ENV["REGEN_ONLY"]?
+      shards = old.shards
+      STDERR.puts "REGEN_ONLY: regenerating site from cached data"
+    else
+      repos = collect_repos(gh, limit)
+      STDERR.puts "discovered #{repos.size} non-fork Crystal repos"
 
-    shards = crawl_details(gh, repos, cache, concurrency)
-    STDERR.puts "#{shards.size} shards with shard.yml"
+      shards = crawl_details(gh, repos, cache, concurrency)
+      STDERR.puts "#{shards.size} shards with shard.yml"
+    end
 
     shards.sort_by! { |s| -s.stars }
     site = SiteData.new(Time.utc.to_rfc3339, shards)
