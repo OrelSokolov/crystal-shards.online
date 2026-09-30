@@ -1,0 +1,9 @@
+name: crystal-shards
+version: 0.1.0
+description: |
+  Crawler and high-performance web server for a catalog of Crystal
+  shards on GitHub. Static pages are pre-generated from ECR templates;
+  search is rendered server-side with zero client-side JavaScript.
+license: MIT
+authors:
+  - Oleg Orlov <vk.orelsokolov@yandex.by>

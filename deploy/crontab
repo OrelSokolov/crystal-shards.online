@@ -1,0 +1,4 @@
+# /etc/cron.d/crystal-shards — crawl every 6 hours, regenerating data
+# and the static site. The server hot-reloads data/shards.json on its own.
+
+0 */6 * * * deploy cd /var/www/crystal-shards/current && set -a && . ./.env.production && set +a && bin/crawler >> log/crawler.log 2>&1

@@ -1,0 +1,37 @@
+<section class="hero">
+  <h1>Find a Crystal shard</h1>
+  <p class="hero-sub"><%= @total %> libraries from GitHub, organized by category.</p>
+  <form class="hero-search" action="/search" method="get" role="search">
+    <input type="search" name="q" placeholder="Search by name, description or topic…" aria-label="Search shards" autofocus>
+    <button type="submit">Search</button>
+  </form>
+</section>
+
+<section class="home-section">
+  <h2>Browse by category</h2>
+  <div class="chip-cloud">
+    <% @cats.each do |(slug, n)| %>
+      <a class="chip chip-lg" href="/category/<%= slug %>"><%= category_title(slug) %> <span class="chip-n"><%= n %></span></a>
+    <% end %>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>Most starred</h2>
+    <a class="more-link" href="/categories">All categories →</a>
+  </div>
+  <div class="card-grid">
+    <% @top.each do |s| %><%= Render.card(s) %><% end %>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-head">
+    <h2>Recently updated</h2>
+    <span class="meta-dim">catalog generated <%= @updated %></span>
+  </div>
+  <div class="card-grid">
+    <% @recent.each do |s| %><%= Render.card(s) %><% end %>
+  </div>
+</section>

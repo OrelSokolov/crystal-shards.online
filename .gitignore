@@ -1,0 +1,14 @@
+.shards/
+bin/
+data/
+log/
+*.dwarf
+.env*
+!.env.example
+
+# crawler-generated site output (assets/ and robots.txt are committed)
+/public/index.html
+/public/sitemap.xml
+/public/shards/
+/public/categories/
+/public/category/

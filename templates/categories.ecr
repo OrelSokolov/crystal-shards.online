@@ -1,0 +1,10 @@
+<h1>Categories</h1>
+<p class="meta-dim">Every shard is assigned to one category based on its GitHub topics and description.</p>
+<div class="cat-grid">
+  <% @cats.each do |(slug, n)| %>
+  <a class="cat-card" href="/category/<%= slug %>">
+    <h2><%= category_title(slug) %></h2>
+    <span class="chip-n"><%= n %> shard<%= n == 1 ? "" : "s" %></span>
+  </a>
+  <% end %>
+</div>

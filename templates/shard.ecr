@@ -1,0 +1,60 @@
+<nav class="crumbs"><a href="/">Home</a> <span>/</span> <a href="/categories">Categories</a> <span>/</span> <a href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a></nav>
+
+<article class="shard-page">
+  <header class="shard-head">
+    <h1><%= HTML.escape(@shard.name) %>
+      <% if !@shard.version.empty? %><span class="ver ver-lg"><%= HTML.escape(@shard.version) %></span><% end %>
+      <% if @shard.archived %><span class="badge badge-warn">unmaintained</span><% end %>
+    </h1>
+    <p class="shard-fullname">by <a href="https://github.com/<%= HTML.escape(@shard.owner) %>" rel="noopener"><%= HTML.escape(@shard.owner) %></a> / <%= HTML.escape(@shard.repo) %></p>
+    <p class="shard-desc"><%= HTML.escape(@shard.description.empty? ? "No description provided." : @shard.description) %></p>
+  </header>
+
+  <div class="shard-cols">
+    <div class="shard-main">
+      <dl class="info-list">
+        <% unless @shard.authors.empty? %>
+        <div><dt>Authors</dt><dd><%= HTML.escape(@shard.authors) %></dd></div>
+        <% end %>
+        <% unless @shard.license.empty? %>
+        <div><dt>License</dt><dd><%= HTML.escape(@shard.license) %></dd></div>
+        <% end %>
+        <div><dt>Category</dt><dd><a href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a></dd></div>
+        <div><dt>Last push</dt><dd><%= @shard.pushed_fmt %></dd></div>
+      </dl>
+
+      <% unless @shard.topics.empty? %>
+      <h2>Topics</h2>
+      <div class="chip-cloud">
+        <% @shard.topics.each do |t| %><span class="chip"><%= HTML.escape(t) %></span><% end %>
+      </div>
+      <% end %>
+
+      <h2>Install</h2>
+      <pre class="code">dependencies:
+  <%= @shard.name %>:
+    github: <%= @shard.full_name %></pre>
+    </div>
+
+    <aside class="shard-side">
+      <a class="btn" href="<%= HTML.escape(@shard.html_url) %>" rel="noopener">View on GitHub</a>
+      <% unless @shard.homepage.empty? %>
+      <a class="btn btn-ghost" href="<%= HTML.escape(@shard.homepage) %>" rel="noopener">Documentation</a>
+      <% end %>
+      <dl class="stats-list">
+        <div><dt>Stars</dt><dd><%= @shard.stars %></dd></div>
+        <div><dt>Forks</dt><dd><%= @shard.forks %></dd></div>
+        <div><dt>Open issues</dt><dd><%= @shard.issues %></dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <% unless @related.empty? %>
+  <section class="home-section">
+    <h2>Similar shards in <%= category_title(@shard.category) %></h2>
+    <div class="card-grid">
+      <% @related.each do |s| %><%= Render.card(s) %><% end %>
+    </div>
+  </section>
+  <% end %>
+</article>

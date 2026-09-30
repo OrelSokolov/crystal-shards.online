@@ -1,0 +1,8 @@
+<nav class="crumbs"><a href="/">Home</a> <span>/</span> <a href="/categories">Categories</a> <span>/</span> <%= @title %></nav>
+<div class="section-head">
+  <h1><%= @title %></h1>
+  <span class="meta-dim"><%= @shards.size %> shards</span>
+</div>
+<div class="card-list">
+  <% @shards.each do |s| %><%= Render.card(s) %><% end %>
+</div>

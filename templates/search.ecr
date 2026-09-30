@@ -1,0 +1,17 @@
+<div class="search-head">
+  <h1>Search results</h1>
+  <form class="hero-search" action="/search" method="get" role="search">
+    <input type="search" name="q" value="<%= HTML.escape(@q) %>" placeholder="Search shards…" aria-label="Search shards">
+    <button type="submit">Search</button>
+  </form>
+  <% if @q.empty? %>
+    <p class="meta-dim">Type a query above — try “web framework”, “json”, “sqlite”…</p>
+  <% elsif @results.empty? %>
+    <p class="meta-dim">Nothing found for “<%= HTML.escape(@q) %>”.</p>
+  <% else %>
+    <p class="meta-dim"><%= @results.size %> of <%= @total %> shards match “<%= HTML.escape(@q) %>”.</p>
+  <% end %>
+</div>
+<div class="card-list">
+  <% @results.each do |s| %><%= Render.card(s) %><% end %>
+</div>

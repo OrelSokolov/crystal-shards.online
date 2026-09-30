@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= HTML.escape(@title) %></title>
+  <meta name="description" content="<%= HTML.escape(@desc) %>">
+  <link rel="canonical" href="<%= HTML.escape(@canonical) %>">
+  <meta property="og:title" content="<%= HTML.escape(@title) %>">
+  <meta property="og:description" content="<%= HTML.escape(@desc) %>">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Crystal&nbsp;Shards</a>
+    <form class="header-search" action="/search" method="get" role="search">
+      <input type="search" name="q" placeholder="Search shards…" aria-label="Search shards">
+    </form>
+    <nav class="site-nav">
+      <a href="/categories">Categories</a>
+      <a href="https://github.com/OrelSokolov/crystal-shards.online" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="wrap">
+<%= @content %>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>An independent catalog of <a href="https://crystal-lang.org" rel="noopener">Crystal</a> libraries on GitHub. Not affiliated with the Crystal team.</p>
+    <p>Data crawled from the public GitHub API · <a href="/sitemap.xml">Sitemap</a> · No JavaScript, no cookies, no tracking.</p>
+  </div>
+</footer>
+</body>
+</html>

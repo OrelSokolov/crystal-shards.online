@@ -1,0 +1,23 @@
+[Unit]
+Description=Crystal Shards catalog (static + search)
+After=network.target
+
+[Service]
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/crystal-shards/current
+EnvironmentFile=/var/www/crystal-shards/shared/.env.production
+Environment=PORT=8080
+ExecStart=/var/www/crystal-shards/current/bin/server
+Restart=always
+RestartSec=3
+LimitNOFILE=65536
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/www/crystal-shards/current/log
+
+[Install]
+WantedBy=multi-user.target

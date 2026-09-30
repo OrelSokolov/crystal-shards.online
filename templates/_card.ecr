@@ -1,0 +1,17 @@
+<article class="card">
+  <h3 class="card-title">
+    <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
+    <% if !@shard.version.empty? %><span class="ver"><%= HTML.escape(@shard.version) %></span><% end %>
+    <% if @shard.archived %><span class="badge badge-warn">unmaintained</span><% end %>
+  </h3>
+  <p class="card-desc"><%= HTML.escape(@shard.description.empty? ? "No description." : @shard.description) %></p>
+  <div class="card-meta">
+    <a class="chip" href="/category/<%= @shard.category %>"><%= category_title(@shard.category) %></a>
+    <span class="meta-item" title="Stars">
+      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
+      <%= @shard.stars %>
+    </span>
+    <span class="meta-item meta-dim"><%= HTML.escape(@shard.full_name) %></span>
+    <span class="meta-item meta-dim">updated <%= @shard.pushed_fmt %></span>
+  </div>
+</article>
