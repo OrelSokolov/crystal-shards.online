@@ -157,10 +157,10 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .gem-meta { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
 
 .gem-side {
-  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-  color: var(--muted); font-weight: 600; font-size: 15px;
+  display: flex; align-items: center; gap: 16px; flex-shrink: 0;
 }
-.gem-side svg { color: #c9a84c; }
+.gem-stars { display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; font-size: 15px; }
+.gem-stars svg { color: #c9a84c; }
 
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);

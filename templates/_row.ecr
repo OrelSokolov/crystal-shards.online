@@ -2,7 +2,6 @@
   <div class="gem-body">
     <div class="gem-title">
       <a href="/shards/<%= HTML.escape(@shard.full_name) %>"><%= HTML.escape(@shard.name) %></a>
-      <% if !@shard.version.empty? %><span class="gem-ver"><%= HTML.escape(@shard.version) %></span><% end %>
       <% st = @shard.status %>
       <% if st == :active %>
       <span class="badge badge-ok"><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.3 12.2 2.8 8.7l1.4-1.4 2.1 2.1 5.5-5.5 1.4 1.4-6.9 6.9z"/></svg>active</span>
@@ -19,8 +18,11 @@
       <span class="meta-dim">· updated <%= @shard.pushed_fmt %></span>
     </div>
   </div>
-  <div class="gem-side" title="Stars">
-    <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
-    <span><%= @shard.stars %></span>
+  <div class="gem-side">
+    <% if !@shard.version.empty? %><span class="gem-ver"><%= HTML.escape(@shard.version) %></span><% end %>
+    <span class="gem-stars" title="Stars">
+      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0l2.47 5.01 5.53.8-4 3.9.94 5.5L8 12.52l-4.94 2.69L4 9.7 0 5.81l5.53-.8L8 0z"/></svg>
+      <%= @shard.stars %>
+    </span>
   </div>
 </li>
