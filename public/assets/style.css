@@ -191,10 +191,10 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .chart .bar-g:hover { cursor: pointer; }
 .chart-tip {
   opacity: 0; pointer-events: none; transition: opacity .1s;
-  font-size: 11px; font-weight: 600; font-family: system-ui, sans-serif;
-  fill: #1c2733; text-anchor: middle;
-  paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+  font-family: system-ui, sans-serif; text-anchor: start; dominant-baseline: hanging;
 }
+.chart-tip .c { font-size: 22px; font-weight: 700; fill: #1c2733; }
+.chart-tip .m { font-size: 11px; font-weight: 400; fill: #64748b; dominant-baseline: hanging; }
 .bar-g:hover .chart-tip { opacity: 1; }
 .chart-label { fill: var(--muted); font-size: 10px; font-family: system-ui, sans-serif; }
 
