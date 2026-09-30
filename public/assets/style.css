@@ -182,7 +182,7 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
   font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px;
 }
 .badge-lg { font-size: 13px; }
-.badge-ok { color: #1a7f37; background: #dff2e4; }
+.badge-ok { color: #0e6b2c; background: #c8ecd1; }
 .badge-warn { color: #6b5210; background: #fae48d; }
 .badge-bad { color: #b3271e; background: #f9d3ce; }
 
