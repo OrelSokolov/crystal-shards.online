@@ -171,7 +171,15 @@ module Render
         t = start + i.months
         ym = t.to_s("%Y-%m")
         label = t.to_s("%b %Y")
+        # hover hint: above the bar, or inside it when the bar is tall
+        tip_y = h - bh - 7
+        tip_inside = tip_y < 12
+        tip_y = h - bh + 16 if tip_inside
+        cx = (x + bw / 2).round(2)
+        io << %(<g class="bar-g">)
         io << %(<a class="bar-link" href="/new?month=#{ym}"><rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect></a>)
+        io << %(<text class="chart-tip#{tip_inside ? " in" : ""}" x="#{cx}" y="#{tip_y.to_i}">#{count}</text>)
+        io << %(</g>)
       end
       (0...span).step(label_every) do |i|
         t = start + i.months
