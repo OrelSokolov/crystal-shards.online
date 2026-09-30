@@ -135,6 +135,7 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .gem-list { list-style: none; margin: 8px 0 0; padding: 0; }
 
 .gem {
+  position: relative;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
   padding: 14px 18px; background: var(--surface);
   border-bottom: 1px solid var(--line);
@@ -163,10 +164,15 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .gem-stars svg { color: #c9a84c; }
 
 .card {
+  position: relative;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 16px 18px; box-shadow: var(--shadow); transition: transform .12s, border-color .12s;
 }
 .card:hover { transform: translateY(-2px); border-color: var(--accent-2); }
+
+/* stretched link: makes the whole card/row clickable */
+.cover { position: absolute; inset: 0; border-radius: var(--radius); z-index: 1; }
+.card-meta a, .gem-meta a { position: relative; z-index: 2; }
 
 .card-title { margin: 0 0 6px; font-size: 16.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .card-title a { color: var(--text); }
