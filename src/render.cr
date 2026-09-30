@@ -161,7 +161,7 @@ module Render
     max = 1 if max < 1
 
     String.build do |io|
-      io << %(<svg class="chart" viewBox="0 0 #{w.to_i} #{(h + label_h).to_i}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New shards by month">)
+      io << %(<svg class="chart" viewBox="0 -14 #{w.to_i} #{(h + label_h + 14).to_i}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="New shards by month">)
       span.times do |i|
         count = buckets[i]
         next if count == 0
@@ -171,14 +171,12 @@ module Render
         t = start + i.months
         ym = t.to_s("%Y-%m")
         label = t.to_s("%b %Y")
-        # hover hint: above the bar, or inside it when the bar is tall
-        tip_y = h - bh - 7
-        tip_inside = tip_y < 12
-        tip_y = h - bh + 16 if tip_inside
+        # hover hint: always right above the bar (viewBox has 14px headroom)
+        tip_y = h - bh - 6
         cx = (x + bw / 2).round(2)
         io << %(<g class="bar-g">)
         io << %(<a class="bar-link" href="/new?month=#{ym}"><rect class="bar" x="#{x.round(2)}" y="#{(h - bh).round(2)}" width="#{(bw - 2).round(2)}" height="#{bh.round(2)}" rx="1"><title>#{label}: #{count} new shard#{count == 1 ? "" : "s"}</title></rect></a>)
-        io << %(<text class="chart-tip#{tip_inside ? " in" : ""}" x="#{cx}" y="#{tip_y.to_i}">#{count}</text>)
+        io << %(<text class="chart-tip" x="#{cx}" y="#{tip_y.to_i}">#{count}</text>)
         io << %(</g>)
       end
       (0...span).step(label_every) do |i|

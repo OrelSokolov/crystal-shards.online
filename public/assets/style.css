@@ -192,10 +192,9 @@ h2 { font-size: 20px; letter-spacing: -.01em; }
 .chart-tip {
   opacity: 0; pointer-events: none; transition: opacity .1s;
   font-size: 11px; font-weight: 600; font-family: system-ui, sans-serif;
-  fill: var(--text); text-anchor: middle;
+  fill: #1c2733; text-anchor: middle;
   paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
 }
-.chart-tip.in { fill: #fff; stroke: none; }
 .bar-g:hover .chart-tip { opacity: 1; }
 .chart-label { fill: var(--muted); font-size: 10px; font-family: system-ui, sans-serif; }
 
